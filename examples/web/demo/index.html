@@ -1074,20 +1074,56 @@ footer a:hover { color: var(--accent); }
 <script>
 const API_BASE = 'https://dashboard.sarvam.ai/api/dubbing';
 const MEDIA_PROXY = 'https://dashboard.sarvam.ai/api/media-proxy?url=';
-const CORS_PROXY = 'https://corsproxy.io/?url=';
+
+// CORS proxies to try in order (fallback chain)
+const CORS_PROXIES = [
+  url => 'https://corsproxy.io/?' + encodeURIComponent(url),
+  url => 'https://api.allorigins.win/raw?url=' + encodeURIComponent(url),
+  url => 'https://cors.sh/' + url,
+];
+
+let activeProxyIdx = 0;
 
 function useCors() {
   return document.getElementById('corsToggle').checked;
 }
 
+function corsWrap(url) {
+  return CORS_PROXIES[activeProxyIdx](url);
+}
+
 function apiUrl(path) {
   const url = API_BASE + path;
-  return useCors() ? CORS_PROXY + encodeURIComponent(url) : url;
+  return useCors() ? corsWrap(url) : url;
 }
 
 function proxyUrl(url) {
   const mediaUrl = MEDIA_PROXY + encodeURIComponent(url);
-  return useCors() ? CORS_PROXY + encodeURIComponent(mediaUrl) : mediaUrl;
+  return useCors() ? corsWrap(mediaUrl) : mediaUrl;
+}
+
+// Smart fetch with proxy fallback
+async function corsFetch(url, opts = {}) {
+  if (!useCors()) return fetch(url, opts);
+
+  const fullUrl = (url.startsWith('http')) ? url : API_BASE + url;
+
+  for (let i = activeProxyIdx; i < CORS_PROXIES.length; i++) {
+    try {
+      const proxied = CORS_PROXIES[i](fullUrl);
+      const res = await fetch(proxied, opts);
+      if (res.status === 403 || res.status === 0) {
+        console.warn(`Proxy ${i} returned ${res.status}, trying next...`);
+        continue;
+      }
+      activeProxyIdx = i; // Remember working proxy
+      return res;
+    } catch (e) {
+      console.warn(`Proxy ${i} failed:`, e.message);
+      if (i === CORS_PROXIES.length - 1) throw e;
+    }
+  }
+  throw new Error('All CORS proxies failed. Try disabling the CORS proxy toggle and opening this file locally.');
 }
 
 // Auto-detect: if opened as file://, no CORS needed
@@ -1301,7 +1337,7 @@ async function startDubbing() {
     document.getElementById('step-upload').querySelector('.step-detail').textContent = 'Creating job...';
 
     const jobName = selectedFile.name.replace(/\.[^.]+$/, '');
-    const jobRes = await fetch(apiUrl('/jobs'), {
+    const jobRes = await corsFetch(API_BASE + '/jobs', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -1315,8 +1351,10 @@ async function startDubbing() {
     });
 
     if (!jobRes.ok) {
-      const err = await jobRes.json().catch(() => ({}));
-      throw new Error(err.message || `Failed to create job (${jobRes.status})`);
+      const errBody = await jobRes.text().catch(() => '');
+      let msg = `Failed to create job (${jobRes.status})`;
+      try { msg = JSON.parse(errBody).message || msg; } catch {}
+      throw new Error(msg);
     }
 
     const jobData = await jobRes.json();
@@ -1326,9 +1364,8 @@ async function startDubbing() {
     document.getElementById('step-upload').querySelector('.step-detail').textContent = 'Uploading...';
 
     if (useCors()) {
-      // Use CORS proxy for upload — send as POST with binary body
-      const proxyUploadUrl = CORS_PROXY + encodeURIComponent(upload_url);
-      const uploadRes = await fetch(proxyUploadUrl, {
+      // Upload through CORS proxy
+      const uploadRes = await corsFetch(upload_url, {
         method: 'PUT',
         headers: { 'x-ms-blob-type': 'BlockBlob' },
         body: selectedFile,
@@ -1367,7 +1404,7 @@ async function startDubbing() {
     updateProgress(5);
 
     // 3. Start processing
-    const startRes = await fetch(apiUrl(`/jobs/${job_id}/start`), { method: 'POST' });
+    const startRes = await corsFetch(API_BASE + `/jobs/${job_id}/start`, { method: 'POST' });
     if (!startRes.ok) {
       throw new Error(`Failed to start processing (${startRes.status})`);
     }
@@ -1392,7 +1429,7 @@ async function pollStatus(jobId) {
   for (let i = 0; i < MAX_POLLS; i++) {
     await sleep(POLL_INTERVAL);
 
-    const res = await fetch(apiUrl(`/jobs/${jobId}/live-status`));
+    const res = await corsFetch(API_BASE + `/jobs/${jobId}/live-status`);
     if (!res.ok) throw new Error(`Status check failed (${res.status})`);
 
     const data = await res.json();
