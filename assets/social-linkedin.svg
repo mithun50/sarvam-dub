@@ -1,0 +1,171 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="627" viewBox="0 0 1200 627">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#08081a"/>
+      <stop offset="100%" stop-color="#0a0a1e"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#7c6aef"/>
+      <stop offset="100%" stop-color="#3b82f6"/>
+    </linearGradient>
+    <linearGradient id="green" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#22c97a"/>
+      <stop offset="100%" stop-color="#10b981"/>
+    </linearGradient>
+    <radialGradient id="glow1" cx="20%" cy="30%">
+      <stop offset="0%" stop-color="#7c6aef" stop-opacity="0.18"/>
+      <stop offset="100%" stop-color="transparent"/>
+    </radialGradient>
+    <radialGradient id="glow2" cx="80%" cy="70%">
+      <stop offset="0%" stop-color="#3b82f6" stop-opacity="0.12"/>
+      <stop offset="100%" stop-color="transparent"/>
+    </radialGradient>
+    <filter id="shadow">
+      <feDropShadow dx="0" dy="4" stdDeviation="12" flood-color="#000" flood-opacity="0.4"/>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="627" fill="url(#bg)"/>
+  <rect width="1200" height="627" fill="url(#glow1)"/>
+  <rect width="1200" height="627" fill="url(#glow2)"/>
+
+  <!-- Subtle grid -->
+  <g stroke="rgba(255,255,255,0.02)" stroke-width="1">
+    <line x1="0" y1="157" x2="1200" y2="157"/>
+    <line x1="0" y1="314" x2="1200" y2="314"/>
+    <line x1="0" y1="471" x2="1200" y2="471"/>
+    <line x1="300" y1="0" x2="300" y2="627"/>
+    <line x1="600" y1="0" x2="600" y2="627"/>
+    <line x1="900" y1="0" x2="900" y2="627"/>
+  </g>
+
+  <!-- Left side: Text content -->
+  <!-- Logo icon -->
+  <g transform="translate(80, 80)">
+    <rect width="52" height="52" rx="12" fill="url(#accent)"/>
+    <circle cx="26" cy="26" r="11" fill="none" stroke="white" stroke-width="2"/>
+    <ellipse cx="26" cy="26" rx="5" ry="11" fill="none" stroke="white" stroke-width="1.5" opacity="0.6"/>
+    <line x1="15" y1="26" x2="37" y2="26" stroke="white" stroke-width="1" opacity="0.4"/>
+  </g>
+
+  <!-- Title -->
+  <text x="80" y="200" font-family="system-ui, -apple-system, sans-serif" font-size="56" font-weight="800" fill="white" letter-spacing="-1.5">Sarvam Dub</text>
+
+  <!-- Subtitle -->
+  <text x="80" y="250" font-family="system-ui, -apple-system, sans-serif" font-size="22" fill="rgba(255,255,255,0.5)" letter-spacing="0.3">AI-Powered Video Dubbing</text>
+
+  <!-- Feature list -->
+  <g transform="translate(80, 300)" font-family="system-ui, -apple-system, sans-serif" font-size="18" fill="rgba(255,255,255,0.7)">
+    <!-- Feature 1 -->
+    <circle cx="8" cy="-5" r="4" fill="#22c97a"/>
+    <text x="22" y="0">12 Indian Languages supported</text>
+    <!-- Feature 2 -->
+    <circle cx="8" cy="37" r="4" fill="#22c97a"/>
+    <text x="22" y="42">AI Voice Cloning preserves tone</text>
+    <!-- Feature 3 -->
+    <circle cx="8" cy="79" r="4" fill="#22c97a"/>
+    <text x="22" y="84">Free &amp; Open Source (MIT)</text>
+    <!-- Feature 4 -->
+    <circle cx="8" cy="121" r="4" fill="#22c97a"/>
+    <text x="22" y="126">No API key required</text>
+  </g>
+
+  <!-- Languages bar -->
+  <g transform="translate(80, 490)" font-family="system-ui, -apple-system, sans-serif" font-size="11" fill="rgba(255,255,255,0.35)">
+    <rect x="0" y="0" width="52" height="24" rx="12" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+    <text x="26" y="16" text-anchor="middle">Hindi</text>
+    <rect x="60" y="0" width="58" height="24" rx="12" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+    <text x="89" y="16" text-anchor="middle">Bengali</text>
+    <rect x="126" y="0" width="50" height="24" rx="12" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+    <text x="151" y="16" text-anchor="middle">Tamil</text>
+    <rect x="184" y="0" width="58" height="24" rx="12" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+    <text x="213" y="16" text-anchor="middle">Telugu</text>
+    <rect x="250" y="0" width="70" height="24" rx="12" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+    <text x="285" y="16" text-anchor="middle">Kannada</text>
+    <rect x="328" y="0" width="68" height="24" rx="12" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+    <text x="362" y="16" text-anchor="middle">+7 more</text>
+  </g>
+
+  <!-- GitHub link -->
+  <g transform="translate(80, 550)" font-family="system-ui, -apple-system, sans-serif" font-size="14" fill="rgba(255,255,255,0.3)">
+    <text x="0" y="0">github.com/mithun50/sarvam-dub</text>
+  </g>
+
+  <!-- Right side: Demo mockup card -->
+  <g transform="translate(680, 60)" filter="url(#shadow)">
+    <rect width="440" height="510" rx="16" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+
+    <!-- Card header -->
+    <rect x="20" y="20" width="400" height="40" rx="8" fill="rgba(255,255,255,0.03)"/>
+    <circle cx="40" cy="40" r="6" fill="#ef4444" opacity="0.6"/>
+    <circle cx="58" cy="40" r="6" fill="#fbbf24" opacity="0.6"/>
+    <circle cx="76" cy="40" r="6" fill="#22c97a" opacity="0.6"/>
+    <text x="220" y="45" text-anchor="middle" font-family="system-ui, sans-serif" font-size="12" fill="rgba(255,255,255,0.3)">Sarvam Dub Demo</text>
+
+    <!-- Upload area mockup -->
+    <rect x="30" y="80" width="380" height="100" rx="10" fill="rgba(124,106,239,0.06)" stroke="rgba(124,106,239,0.15)" stroke-width="1" stroke-dasharray="6 4"/>
+    <text x="220" y="125" text-anchor="middle" font-family="system-ui, sans-serif" font-size="28" fill="rgba(255,255,255,0.15)">
+      <tspan>&#x2191;</tspan>
+    </text>
+    <text x="220" y="158" text-anchor="middle" font-family="system-ui, sans-serif" font-size="13" fill="rgba(255,255,255,0.25)">Drop video here</text>
+
+    <!-- Settings mockup -->
+    <text x="30" y="210" font-family="system-ui, sans-serif" font-size="10" fill="rgba(255,255,255,0.25)" text-transform="uppercase" letter-spacing="1">SETTINGS</text>
+
+    <!-- Source lang -->
+    <rect x="30" y="220" width="180" height="32" rx="6" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+    <text x="42" y="241" font-family="system-ui, sans-serif" font-size="13" fill="rgba(255,255,255,0.4)">English</text>
+
+    <!-- Arrow -->
+    <text x="224" y="242" font-family="system-ui, sans-serif" font-size="16" fill="rgba(124,106,239,0.6)">&#x2192;</text>
+
+    <!-- Target lang -->
+    <rect x="240" y="220" width="170" height="32" rx="6" fill="rgba(124,106,239,0.08)" stroke="rgba(124,106,239,0.2)" stroke-width="1"/>
+    <text x="252" y="241" font-family="system-ui, sans-serif" font-size="13" fill="rgba(167,139,250,0.7)">Hindi</text>
+
+    <!-- Language chips -->
+    <g transform="translate(30, 270)" font-family="system-ui, sans-serif" font-size="11">
+      <rect x="0" y="0" width="50" height="24" rx="12" fill="rgba(124,106,239,0.15)" stroke="rgba(124,106,239,0.3)" stroke-width="1"/>
+      <text x="25" y="16" text-anchor="middle" fill="rgba(167,139,250,0.8)">Hindi</text>
+      <rect x="58" y="0" width="52" height="24" rx="12" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+      <text x="84" y="16" text-anchor="middle" fill="rgba(255,255,255,0.3)">Tamil</text>
+      <rect x="118" y="0" width="60" height="24" rx="12" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+      <text x="148" y="16" text-anchor="middle" fill="rgba(255,255,255,0.3)">Telugu</text>
+      <rect x="186" y="0" width="62" height="24" rx="12" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+      <text x="217" y="16" text-anchor="middle" fill="rgba(255,255,255,0.3)">Bengali</text>
+    </g>
+
+    <!-- Progress mockup -->
+    <text x="30" y="330" font-family="system-ui, sans-serif" font-size="10" fill="rgba(255,255,255,0.25)" letter-spacing="1">PROGRESS</text>
+
+    <!-- Step items -->
+    <g transform="translate(30, 345)">
+      <!-- Step 1 done -->
+      <circle cx="8" cy="8" r="8" fill="rgba(34,201,122,0.15)" stroke="#22c97a" stroke-width="1.5"/>
+      <text x="8" y="12" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10" fill="#22c97a">&#x2713;</text>
+      <text x="24" y="12" font-family="system-ui, sans-serif" font-size="12" fill="#22c97a">Uploaded</text>
+      <line x1="8" y1="18" x2="8" y2="30" stroke="rgba(34,201,122,0.3)" stroke-width="1.5"/>
+
+      <!-- Step 2 done -->
+      <circle cx="8" cy="38" r="8" fill="rgba(34,201,122,0.15)" stroke="#22c97a" stroke-width="1.5"/>
+      <text x="8" y="42" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10" fill="#22c97a">&#x2713;</text>
+      <text x="24" y="42" font-family="system-ui, sans-serif" font-size="12" fill="#22c97a">Transcribed</text>
+      <line x1="8" y1="48" x2="8" y2="60" stroke="rgba(34,201,122,0.3)" stroke-width="1.5"/>
+
+      <!-- Step 3 active -->
+      <circle cx="8" cy="68" r="8" fill="rgba(124,106,239,0.15)" stroke="#7c6aef" stroke-width="1.5"/>
+      <text x="24" y="72" font-family="system-ui, sans-serif" font-size="12" fill="rgba(255,255,255,0.7)">Translating...</text>
+      <line x1="8" y1="78" x2="8" y2="90" stroke="rgba(255,255,255,0.06)" stroke-width="1.5"/>
+
+      <!-- Step 4 pending -->
+      <circle cx="8" cy="98" r="8" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="1.5"/>
+      <text x="24" y="102" font-family="system-ui, sans-serif" font-size="12" fill="rgba(255,255,255,0.2)">Generating Audio</text>
+    </g>
+
+    <!-- Progress bar -->
+    <rect x="30" y="470" width="380" height="4" rx="2" fill="rgba(255,255,255,0.04)"/>
+    <rect x="30" y="470" width="220" height="4" rx="2" fill="url(#accent)"/>
+    <text x="400" y="465" text-anchor="end" font-family="system-ui, sans-serif" font-size="11" fill="rgba(255,255,255,0.3)">58%</text>
+  </g>
+</svg>
