@@ -19,6 +19,7 @@ import os
 PORT = int(os.environ.get("PORT", 8000))
 API_HOST = "https://dashboard.sarvam.ai"
 DEMO_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "demo")
+USER_AGENT = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36"
 
 
 class ProxyHandler(http.server.SimpleHTTPRequestHandler):
@@ -42,7 +43,7 @@ class ProxyHandler(http.server.SimpleHTTPRequestHandler):
         content_length = int(self.headers.get("Content-Length", 0))
         body = self.rfile.read(content_length) if content_length > 0 else None
 
-        headers = {}
+        headers = {"User-Agent": USER_AGENT}
         if self.headers.get("Content-Type"):
             headers["Content-Type"] = self.headers["Content-Type"]
 
@@ -88,7 +89,7 @@ class ProxyHandler(http.server.SimpleHTTPRequestHandler):
         content_length = int(self.headers.get("Content-Length", 0))
         body = self.rfile.read(content_length) if content_length > 0 else None
 
-        headers = {"x-ms-blob-type": "BlockBlob"}
+        headers = {"x-ms-blob-type": "BlockBlob", "User-Agent": USER_AGENT}
         if self.headers.get("Content-Type"):
             headers["Content-Type"] = self.headers["Content-Type"]
 
