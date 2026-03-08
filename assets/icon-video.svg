@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128">
+  <defs>
+    <linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#7c6aef"/>
+      <stop offset="100%" stop-color="#3b82f6"/>
+    </linearGradient>
+  </defs>
+  <rect width="128" height="128" rx="28" fill="url(#g)"/>
+  <!-- Video frame -->
+  <rect x="24" y="36" width="60" height="56" rx="8" fill="none" stroke="white" stroke-width="4"/>
+  <!-- Camera lens -->
+  <path d="M84 52 L104 40 L104 88 L84 76" fill="none" stroke="white" stroke-width="4" stroke-linejoin="round"/>
+  <!-- Play triangle -->
+  <polygon points="46,52 46,80 66,66" fill="white" opacity="0.5"/>
+</svg>
