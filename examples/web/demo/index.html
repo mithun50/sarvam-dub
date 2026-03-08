@@ -8,46 +8,116 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-  --bg: #0a0a0f;
-  --surface: rgba(255,255,255,0.04);
-  --surface-hover: rgba(255,255,255,0.07);
-  --border: rgba(255,255,255,0.08);
-  --border-hover: rgba(255,255,255,0.15);
-  --text: #e4e4e7;
-  --text-dim: #71717a;
-  --accent: #818cf8;
-  --accent-glow: rgba(129,140,248,0.15);
-  --success: #34d399;
-  --error: #f87171;
-  --warning: #fbbf24;
-  --radius: 12px;
+  --bg: #06060b;
+  --bg2: #0c0c14;
+  --surface: rgba(255,255,255,0.035);
+  --surface2: rgba(255,255,255,0.055);
+  --border: rgba(255,255,255,0.07);
+  --border-hover: rgba(255,255,255,0.14);
+  --text: #e8e8ec;
+  --text-dim: #6b6b7b;
+  --accent: #7c6aef;
+  --accent2: #a78bfa;
+  --accent-glow: rgba(124,106,239,0.12);
+  --accent-glow2: rgba(124,106,239,0.25);
+  --success: #22c97a;
+  --success-glow: rgba(34,201,122,0.12);
+  --error: #ef4444;
+  --error-glow: rgba(239,68,68,0.1);
+  --radius: 14px;
+  --radius-sm: 8px;
 }
 
+html { scroll-behavior: smooth; }
+
 body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
   background: var(--bg);
   color: var(--text);
   min-height: 100vh;
   line-height: 1.6;
+  overflow-x: hidden;
+}
+
+/* Ambient background */
+.ambient {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.ambient-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(100px);
+  opacity: 0.35;
+  animation: float 20s ease-in-out infinite;
+}
+
+.ambient-orb:nth-child(1) {
+  width: 400px; height: 400px;
+  background: radial-gradient(circle, #7c6aef 0%, transparent 70%);
+  top: -100px; left: -100px;
+  animation-delay: 0s;
+}
+
+.ambient-orb:nth-child(2) {
+  width: 350px; height: 350px;
+  background: radial-gradient(circle, #3b82f6 0%, transparent 70%);
+  bottom: -80px; right: -80px;
+  animation-delay: -7s;
+  animation-duration: 25s;
+}
+
+.ambient-orb:nth-child(3) {
+  width: 250px; height: 250px;
+  background: radial-gradient(circle, #a78bfa 0%, transparent 70%);
+  top: 40%; left: 60%;
+  animation-delay: -14s;
+  animation-duration: 30s;
+  opacity: 0.2;
+}
+
+@keyframes float {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  25% { transform: translate(30px, -40px) scale(1.05); }
+  50% { transform: translate(-20px, 20px) scale(0.95); }
+  75% { transform: translate(15px, 30px) scale(1.02); }
 }
 
 .container {
-  max-width: 720px;
+  max-width: 680px;
   margin: 0 auto;
-  padding: 24px 16px 48px;
+  padding: 20px 16px 60px;
+  position: relative;
 }
 
-/* Header */
+/* ── Header ── */
 header {
   text-align: center;
-  padding: 32px 0 24px;
+  padding: 40px 0 28px;
 }
 
+.logo {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px; height: 56px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, var(--accent), #3b82f6);
+  margin-bottom: 16px;
+  box-shadow: 0 8px 32px rgba(124,106,239,0.3);
+}
+
+.logo svg { color: white; }
+
 header h1 {
-  font-size: 28px;
+  font-size: 32px;
   font-weight: 700;
-  letter-spacing: -0.5px;
-  background: linear-gradient(135deg, #e4e4e7, #818cf8);
+  letter-spacing: -0.8px;
+  background: linear-gradient(135deg, #fff 30%, var(--accent2));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -61,60 +131,99 @@ header p {
 
 .badges {
   display: flex;
-  gap: 8px;
+  gap: 6px;
   justify-content: center;
-  margin-top: 12px;
+  margin-top: 14px;
   flex-wrap: wrap;
 }
 
 .badge {
   font-size: 11px;
-  padding: 3px 10px;
-  border-radius: 20px;
-  background: var(--surface);
+  padding: 4px 12px;
+  border-radius: 100px;
+  background: var(--surface2);
   border: 1px solid var(--border);
   color: var(--text-dim);
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
 }
 
-/* Card */
+.badge svg { opacity: 0.5; }
+
+/* ── Card ── */
 .card {
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  padding: 20px;
-  margin-top: 20px;
-  backdrop-filter: blur(12px);
+  padding: 22px;
+  margin-top: 18px;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  transition: border-color 0.3s;
+}
+
+.card:hover { border-color: var(--border-hover); }
+
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.card-icon {
+  width: 32px; height: 32px;
+  border-radius: 8px;
+  background: var(--accent-glow);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--accent2);
+  flex-shrink: 0;
 }
 
 .card-title {
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  color: var(--text-dim);
-  margin-bottom: 14px;
+  color: var(--text);
+  letter-spacing: -0.2px;
 }
 
-/* Drop zone */
+/* ── Drop zone ── */
 .drop-zone {
-  border: 2px dashed var(--border);
+  border: 1.5px dashed var(--border);
   border-radius: var(--radius);
-  padding: 40px 20px;
+  padding: 44px 20px;
   text-align: center;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all 0.25s;
   position: relative;
+  background: var(--bg);
 }
 
 .drop-zone:hover, .drop-zone.drag-over {
   border-color: var(--accent);
   background: var(--accent-glow);
+  box-shadow: inset 0 0 40px var(--accent-glow);
 }
 
 .drop-zone-icon {
-  font-size: 36px;
-  margin-bottom: 8px;
-  opacity: 0.5;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 52px; height: 52px;
+  border-radius: 14px;
+  background: var(--surface2);
+  color: var(--text-dim);
+  margin-bottom: 12px;
+  transition: all 0.25s;
+}
+
+.drop-zone:hover .drop-zone-icon {
+  color: var(--accent2);
+  background: var(--accent-glow);
+  transform: translateY(-2px);
 }
 
 .drop-zone-text {
@@ -122,38 +231,53 @@ header p {
   font-size: 14px;
 }
 
-.drop-zone-text strong {
-  color: var(--accent);
+.drop-zone-text strong { color: var(--accent2); }
+
+.drop-zone-hint {
+  color: var(--text-dim);
+  font-size: 12px;
+  margin-top: 4px;
+  opacity: 0.5;
 }
 
 .drop-zone input[type="file"] {
   position: absolute;
   inset: 0;
+  width: 100%;
+  height: 100%;
   opacity: 0;
   cursor: pointer;
 }
 
-/* File info */
+/* ── File info ── */
 .file-info {
   display: none;
   align-items: center;
   gap: 12px;
-  padding: 12px 16px;
-  background: var(--surface);
+  padding: 12px 14px;
+  background: var(--surface2);
   border: 1px solid var(--border);
-  border-radius: var(--radius);
+  border-radius: 10px;
   margin-top: 12px;
 }
 
 .file-info.visible { display: flex; }
 
-.file-info-details {
-  flex: 1;
-  min-width: 0;
+.file-icon {
+  width: 36px; height: 36px;
+  border-radius: 8px;
+  background: var(--accent-glow);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--accent2);
+  flex-shrink: 0;
 }
 
+.file-info-details { flex: 1; min-width: 0; }
+
 .file-info-name {
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 500;
   white-space: nowrap;
   overflow: hidden;
@@ -161,7 +285,7 @@ header p {
 }
 
 .file-info-size {
-  font-size: 12px;
+  font-size: 11px;
   color: var(--text-dim);
 }
 
@@ -170,197 +294,256 @@ header p {
   border: none;
   color: var(--text-dim);
   cursor: pointer;
-  font-size: 18px;
-  padding: 4px;
-  line-height: 1;
+  padding: 6px;
+  border-radius: 6px;
+  display: flex;
+  transition: all 0.2s;
 }
 
-.file-remove:hover { color: var(--error); }
+.file-remove:hover {
+  color: var(--error);
+  background: var(--error-glow);
+}
 
-/* Form controls */
+/* ── Form ── */
 .form-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 14px;
+  gap: 16px;
 }
 
 @media (max-width: 500px) {
   .form-grid { grid-template-columns: 1fr; }
 }
 
-.form-group { display: flex; flex-direction: column; gap: 5px; }
+.form-group { display: flex; flex-direction: column; gap: 6px; }
 .form-group.full-width { grid-column: 1 / -1; }
 
-label {
-  font-size: 13px;
-  font-weight: 500;
+.form-label {
+  font-size: 12px;
+  font-weight: 600;
   color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
+
+.form-label svg { opacity: 0.4; }
 
 select, input[type="number"] {
   background: var(--bg);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-sm);
   color: var(--text);
-  padding: 9px 12px;
+  padding: 10px 12px;
   font-size: 14px;
   font-family: inherit;
   outline: none;
-  transition: border-color 0.2s;
+  transition: all 0.2s;
   width: 100%;
+  -webkit-appearance: none;
 }
 
 select:focus, input[type="number"]:focus {
   border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-glow);
 }
 
-select[multiple] {
-  min-height: 120px;
-  padding: 4px;
+/* Custom select arrow */
+select:not([multiple]) {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236b6b7b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  padding-right: 32px;
 }
 
-select[multiple] option {
-  padding: 6px 10px;
-  border-radius: 4px;
-  margin: 1px 0;
+/* ── Language chips ── */
+.lang-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
 }
 
-select[multiple] option:checked {
-  background: var(--accent) linear-gradient(0deg, var(--accent), var(--accent));
-  color: white;
+.lang-chip {
+  font-size: 13px;
+  padding: 7px 14px;
+  border-radius: 100px;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  color: var(--text-dim);
+  cursor: pointer;
+  transition: all 0.2s;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.lang-chip:hover {
+  border-color: var(--border-hover);
+  color: var(--text);
+}
+
+.lang-chip.selected {
+  background: var(--accent-glow2);
+  border-color: var(--accent);
+  color: var(--accent2);
+  font-weight: 500;
+}
+
+.lang-chip.selected:hover {
+  background: var(--accent-glow);
 }
 
 .hint {
   font-size: 11px;
   color: var(--text-dim);
-  opacity: 0.7;
+  opacity: 0.6;
 }
 
-/* Button */
+/* ── Button ── */
 .btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
-  padding: 12px 24px;
+  padding: 13px 24px;
   border: none;
-  border-radius: 8px;
-  font-size: 15px;
+  border-radius: 10px;
+  font-size: 14px;
   font-weight: 600;
   font-family: inherit;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all 0.25s;
   width: 100%;
   margin-top: 20px;
+  letter-spacing: -0.1px;
 }
 
+.btn svg { flex-shrink: 0; }
+
 .btn-primary {
-  background: var(--accent);
+  background: linear-gradient(135deg, var(--accent), #5b4cd4);
   color: white;
+  box-shadow: 0 4px 16px rgba(124,106,239,0.2);
 }
 
 .btn-primary:hover:not(:disabled) {
-  background: #6366f1;
   transform: translateY(-1px);
-  box-shadow: 0 4px 20px var(--accent-glow);
+  box-shadow: 0 8px 28px rgba(124,106,239,0.35);
+}
+
+.btn-primary:active:not(:disabled) {
+  transform: translateY(0);
 }
 
 .btn-primary:disabled {
-  opacity: 0.4;
+  opacity: 0.35;
   cursor: not-allowed;
+  box-shadow: none;
 }
 
 .btn-download {
-  background: rgba(52,211,153,0.12);
+  background: var(--success-glow);
   color: var(--success);
-  border: 1px solid rgba(52,211,153,0.2);
-  margin-top: 12px;
+  border: 1px solid rgba(34,201,122,0.2);
+  margin-top: 14px;
   text-decoration: none;
 }
 
 .btn-download:hover {
-  background: rgba(52,211,153,0.2);
+  background: rgba(34,201,122,0.18);
+  transform: translateY(-1px);
 }
 
-/* Progress */
+/* ── Progress ── */
 #progress-section { display: none; }
 #progress-section.visible { display: block; }
 
 .progress-steps {
   display: flex;
   flex-direction: column;
-  gap: 0;
 }
 
 .progress-step {
   display: flex;
   align-items: flex-start;
-  gap: 12px;
+  gap: 14px;
   padding: 10px 0;
   position: relative;
 }
 
+/* Connector line */
 .progress-step:not(:last-child)::after {
   content: '';
   position: absolute;
-  left: 11px;
-  top: 34px;
-  bottom: -2px;
-  width: 2px;
+  left: 13px;
+  top: 36px;
+  bottom: -4px;
+  width: 1.5px;
   background: var(--border);
+  transition: background 0.3s;
 }
 
 .progress-step.active:not(:last-child)::after {
   background: var(--accent);
-  opacity: 0.4;
+  opacity: 0.3;
 }
 
 .progress-step.done:not(:last-child)::after {
   background: var(--success);
-  opacity: 0.5;
+  opacity: 0.4;
 }
 
 .step-dot {
-  width: 24px;
-  height: 24px;
+  width: 28px;
+  height: 28px;
   border-radius: 50%;
-  border: 2px solid var(--border);
+  border: 1.5px solid var(--border);
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  font-size: 12px;
   background: var(--bg);
-  transition: all 0.3s;
+  transition: all 0.35s;
+  color: var(--text-dim);
 }
+
+.step-dot svg { opacity: 0; transition: opacity 0.3s; }
 
 .progress-step.active .step-dot {
   border-color: var(--accent);
   background: var(--accent-glow);
-  animation: pulse-dot 2s infinite;
+  animation: pulse-dot 2s ease-in-out infinite;
 }
+
+.progress-step.active .step-dot svg { opacity: 0; }
 
 .progress-step.done .step-dot {
   border-color: var(--success);
-  background: rgba(52,211,153,0.15);
+  background: var(--success-glow);
   color: var(--success);
 }
 
+.progress-step.done .step-dot svg { opacity: 1; }
+
 .progress-step.error .step-dot {
   border-color: var(--error);
-  background: rgba(248,113,113,0.15);
+  background: var(--error-glow);
   color: var(--error);
 }
 
+.progress-step.error .step-dot svg { opacity: 1; }
+
 @keyframes pulse-dot {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(129,140,248,0.3); }
-  50% { box-shadow: 0 0 0 6px rgba(129,140,248,0); }
+  0%, 100% { box-shadow: 0 0 0 0 rgba(124,106,239,0.25); }
+  50% { box-shadow: 0 0 0 8px rgba(124,106,239,0); }
 }
 
-.step-info { flex: 1; min-width: 0; }
+.step-info { flex: 1; min-width: 0; padding-top: 3px; }
 
 .step-label {
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 500;
   color: var(--text-dim);
   transition: color 0.3s;
@@ -371,44 +554,66 @@ select[multiple] option:checked {
 .progress-step.error .step-label { color: var(--error); }
 
 .step-detail {
-  font-size: 12px;
+  font-size: 11px;
   color: var(--text-dim);
-  opacity: 0.6;
+  opacity: 0.5;
+  margin-top: 1px;
 }
 
 /* Progress bar */
 .progress-bar-wrap {
   width: 100%;
-  height: 6px;
-  background: var(--surface);
-  border-radius: 3px;
-  margin-top: 16px;
+  height: 4px;
+  background: var(--surface2);
+  border-radius: 2px;
+  margin-top: 18px;
   overflow: hidden;
 }
 
 .progress-bar-fill {
   height: 100%;
-  background: linear-gradient(90deg, var(--accent), #a78bfa);
-  border-radius: 3px;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  border-radius: 2px;
   width: 0%;
-  transition: width 0.5s ease;
+  transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+}
+
+.progress-bar-fill::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+  animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
 }
 
 .progress-percent {
   text-align: right;
-  font-size: 12px;
+  font-size: 11px;
   color: var(--text-dim);
-  margin-top: 4px;
+  margin-top: 6px;
+  font-variant-numeric: tabular-nums;
 }
 
-/* Result */
+/* ── Result ── */
 #result-section { display: none; }
 #result-section.visible { display: block; }
 
+.video-wrap {
+  border-radius: 10px;
+  overflow: hidden;
+  background: #000;
+  border: 1px solid var(--border);
+}
+
 .video-player {
   width: 100%;
-  border-radius: var(--radius);
-  background: #000;
+  display: block;
   outline: none;
   max-height: 400px;
 }
@@ -416,111 +621,275 @@ select[multiple] option:checked {
 .result-meta {
   display: flex;
   gap: 16px;
-  margin-top: 10px;
+  margin-top: 12px;
   flex-wrap: wrap;
 }
 
 .meta-item {
   font-size: 12px;
   color: var(--text-dim);
+  display: flex;
+  align-items: center;
+  gap: 5px;
 }
 
-.meta-item strong {
-  color: var(--text);
-}
+.meta-item strong { color: var(--text); font-weight: 500; }
 
-/* Error */
+/* ── Error ── */
 .error-box {
   display: none;
-  background: rgba(248,113,113,0.08);
-  border: 1px solid rgba(248,113,113,0.2);
-  border-radius: var(--radius);
-  padding: 14px 16px;
+  align-items: flex-start;
+  gap: 10px;
+  background: var(--error-glow);
+  border: 1px solid rgba(239,68,68,0.15);
+  border-radius: 10px;
+  padding: 13px 16px;
   margin-top: 16px;
-  font-size: 14px;
+  font-size: 13px;
   color: var(--error);
 }
 
-.error-box.visible { display: block; }
+.error-box.visible { display: flex; }
 
-/* Upload progress */
-.upload-progress {
-  display: none;
-  margin-top: 12px;
+.error-icon {
+  flex-shrink: 0;
+  margin-top: 1px;
 }
 
-.upload-progress.visible { display: block; }
-
-/* Spinner */
+/* ── Spinner ── */
 .spinner {
   display: inline-block;
-  width: 14px;
-  height: 14px;
-  border: 2px solid rgba(255,255,255,0.2);
+  width: 16px; height: 16px;
+  border: 2px solid rgba(255,255,255,0.15);
   border-top-color: white;
   border-radius: 50%;
-  animation: spin 0.7s linear infinite;
+  animation: spin 0.6s linear infinite;
 }
 
 @keyframes spin { to { transform: rotate(360deg); } }
 
-/* Footer */
+/* ── CORS banner ── */
+.cors-banner {
+  background: rgba(251,191,36,0.08);
+  border: 1px solid rgba(251,191,36,0.15);
+  border-radius: 10px;
+  padding: 12px 16px;
+  margin-top: 18px;
+  font-size: 12px;
+  color: #fbbf24;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  line-height: 1.5;
+}
+
+.cors-banner a { color: #fbbf24; text-decoration: underline; }
+
+.cors-toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.cors-toggle label {
+  font-size: 12px;
+  color: var(--text-dim);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.switch {
+  position: relative;
+  width: 36px;
+  height: 20px;
+  display: inline-block;
+}
+
+.switch input { opacity: 0; width: 0; height: 0; }
+
+.switch-slider {
+  position: absolute;
+  inset: 0;
+  background: var(--surface2);
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.switch-slider::before {
+  content: '';
+  position: absolute;
+  width: 14px; height: 14px;
+  border-radius: 50%;
+  background: var(--text-dim);
+  left: 2px; top: 2px;
+  transition: all 0.2s;
+}
+
+.switch input:checked + .switch-slider {
+  background: var(--accent-glow2);
+  border-color: var(--accent);
+}
+
+.switch input:checked + .switch-slider::before {
+  background: var(--accent2);
+  transform: translateX(16px);
+}
+
+/* ── Footer ── */
 footer {
   text-align: center;
-  padding: 32px 0 16px;
+  padding: 36px 0 16px;
   color: var(--text-dim);
   font-size: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
 }
 
 footer a {
-  color: var(--accent);
+  color: var(--accent2);
   text-decoration: none;
+  transition: color 0.2s;
 }
 
-footer a:hover { text-decoration: underline; }
+footer a:hover { color: var(--accent); }
+
+.footer-dot { opacity: 0.3; }
+
+/* ── Transitions ── */
+.card, .file-info, .error-box, #result-section, #progress-section {
+  animation: fadeUp 0.35s ease-out;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
 </style>
 </head>
 <body>
+
+<!-- Ambient background orbs -->
+<div class="ambient">
+  <div class="ambient-orb"></div>
+  <div class="ambient-orb"></div>
+  <div class="ambient-orb"></div>
+</div>
 
 <div class="container">
 
   <!-- Header -->
   <header>
+    <div class="logo">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 20a8 8 0 1 0 0-16 8 8 0 0 0 0 16Z"/>
+        <path d="M12 14a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z"/>
+        <path d="M12 2v2"/>
+        <path d="M12 20v2"/>
+        <path d="m4.93 4.93 1.41 1.41"/>
+        <path d="m17.66 17.66 1.41 1.41"/>
+        <path d="M2 12h2"/>
+        <path d="M20 12h2"/>
+        <path d="m6.34 17.66-1.41 1.41"/>
+        <path d="m19.07 4.93-1.41 1.41"/>
+      </svg>
+    </div>
     <h1>Sarvam Dub</h1>
     <p>AI-powered video dubbing for 12 Indian languages</p>
     <div class="badges">
-      <span class="badge">Voice Cloning</span>
-      <span class="badge">No API Key</span>
-      <span class="badge">Free</span>
-      <span class="badge">12 Languages</span>
+      <span class="badge">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" x2="12" y1="19" y2="22"/></svg>
+        Voice Cloning
+      </span>
+      <span class="badge">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        No API Key
+      </span>
+      <span class="badge">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m16 8-8 8"/><path d="M8.5 8H8"/><path d="M16 15.5v.5"/></svg>
+        Free
+      </span>
+      <span class="badge">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>
+        12 Languages
+      </span>
     </div>
   </header>
 
-  <!-- Upload -->
-  <div class="card">
-    <div class="card-title">Upload Video</div>
-    <div class="drop-zone" id="dropZone">
-      <input type="file" id="fileInput" accept="video/*,.mp4,.mkv,.avi,.mov,.webm">
-      <div class="drop-zone-icon">&#9654;&#65039;</div>
-      <div class="drop-zone-text">
-        Drag &amp; drop a video or <strong>browse</strong>
+  <!-- CORS notice -->
+  <div class="cors-banner" id="corsBanner">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:1px"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>
+    <div>
+      <strong>CORS Proxy enabled</strong> &mdash; Browser security blocks direct API calls to Sarvam AI from this page. A CORS proxy is used to relay requests. For local use, you can open this file directly.
+      <div class="cors-toggle">
+        <label class="switch">
+          <input type="checkbox" id="corsToggle" checked>
+          <span class="switch-slider"></span>
+        </label>
+        <label for="corsToggle">Use CORS proxy</label>
       </div>
     </div>
+  </div>
+
+  <!-- Upload -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" x2="12" y1="3" y2="15"/></svg>
+      </div>
+      <div class="card-title">Upload Video</div>
+    </div>
+    <div class="drop-zone" id="dropZone">
+      <input type="file" id="fileInput" accept="video/*,.mp4,.mkv,.avi,.mov,.webm">
+      <div class="drop-zone-icon">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242"/>
+          <path d="M12 12v9"/>
+          <path d="m16 16-4-4-4 4"/>
+        </svg>
+      </div>
+      <div class="drop-zone-text">
+        Drag & drop a video or <strong>browse</strong>
+      </div>
+      <div class="drop-zone-hint">MP4, MKV, AVI, MOV, WebM</div>
+    </div>
     <div class="file-info" id="fileInfo">
+      <div class="file-icon">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="m16 13 5.223 3.482a.5.5 0 0 0 .777-.416V7.87a.5.5 0 0 0-.752-.432L16 10.5"/>
+          <rect x="2" y="6" width="14" height="12" rx="2"/>
+        </svg>
+      </div>
       <div class="file-info-details">
         <div class="file-info-name" id="fileName"></div>
         <div class="file-info-size" id="fileSize"></div>
       </div>
-      <button class="file-remove" id="fileRemove" title="Remove">&times;</button>
+      <button class="file-remove" id="fileRemove" title="Remove file">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+      </button>
     </div>
   </div>
 
   <!-- Settings -->
   <div class="card">
-    <div class="card-title">Dubbing Settings</div>
+    <div class="card-header">
+      <div class="card-icon">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
+      </div>
+      <div class="card-title">Settings</div>
+    </div>
     <div class="form-grid">
       <div class="form-group">
-        <label for="srcLang">Source Language</label>
+        <label class="form-label" for="srcLang">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>
+          Source Language
+        </label>
         <select id="srcLang">
           <option value="Assamese">Assamese</option>
           <option value="Bengali">Bengali</option>
@@ -538,31 +907,40 @@ footer a:hover { text-decoration: underline; }
       </div>
 
       <div class="form-group">
-        <label for="numSpeakers">Speakers</label>
+        <label class="form-label" for="numSpeakers">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          Speakers
+        </label>
         <input type="number" id="numSpeakers" value="1" min="1" max="10">
       </div>
 
       <div class="form-group full-width">
-        <label for="targetLangs">Target Languages</label>
-        <select id="targetLangs" multiple>
-          <option value="Assamese">Assamese</option>
-          <option value="Bengali">Bengali</option>
-          <option value="English">English</option>
-          <option value="Gujarati">Gujarati</option>
-          <option value="Hindi" selected>Hindi</option>
-          <option value="Kannada">Kannada</option>
-          <option value="Malayalam">Malayalam</option>
-          <option value="Marathi">Marathi</option>
-          <option value="Odia">Odia</option>
-          <option value="Punjabi">Punjabi</option>
-          <option value="Tamil">Tamil</option>
-          <option value="Telugu">Telugu</option>
-        </select>
-        <span class="hint">Hold Ctrl/Cmd to select multiple</span>
+        <label class="form-label">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 8 6 6"/><path d="m4 14 6-6 2-3"/><path d="M2 5h12"/><path d="M7 2h1"/><path d="m22 22-5-10-5 10"/><path d="M14 18h6"/></svg>
+          Target Languages
+        </label>
+        <div class="lang-chips" id="targetLangs">
+          <span class="lang-chip" data-lang="Assamese">Assamese</span>
+          <span class="lang-chip" data-lang="Bengali">Bengali</span>
+          <span class="lang-chip" data-lang="English">English</span>
+          <span class="lang-chip" data-lang="Gujarati">Gujarati</span>
+          <span class="lang-chip selected" data-lang="Hindi">Hindi</span>
+          <span class="lang-chip" data-lang="Kannada">Kannada</span>
+          <span class="lang-chip" data-lang="Malayalam">Malayalam</span>
+          <span class="lang-chip" data-lang="Marathi">Marathi</span>
+          <span class="lang-chip" data-lang="Odia">Odia</span>
+          <span class="lang-chip" data-lang="Punjabi">Punjabi</span>
+          <span class="lang-chip" data-lang="Tamil">Tamil</span>
+          <span class="lang-chip" data-lang="Telugu">Telugu</span>
+        </div>
+        <span class="hint">Click to select multiple target languages</span>
       </div>
 
       <div class="form-group full-width">
-        <label for="genre">Genre</label>
+        <label class="form-label" for="genre">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m22 8-6 4 6 4V8Z"/><rect width="14" height="12" x="2" y="6" rx="2" ry="2"/></svg>
+          Genre
+        </label>
         <select id="genre">
           <option value="podcast">Podcast / Interview</option>
           <option value="monologue">Monologue / Vlog</option>
@@ -575,58 +953,78 @@ footer a:hover { text-decoration: underline; }
     </div>
 
     <button class="btn btn-primary" id="dubBtn" disabled>
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
       Start Dubbing
     </button>
   </div>
 
   <!-- Progress -->
   <div class="card" id="progress-section">
-    <div class="card-title">Progress</div>
+    <div class="card-header">
+      <div class="card-icon">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-2.48a2 2 0 0 0-1.93 1.46l-2.35 8.36a.25.25 0 0 1-.48 0L9.24 2.18a.25.25 0 0 0-.48 0l-2.35 8.36A2 2 0 0 1 4.49 12H2"/></svg>
+      </div>
+      <div class="card-title">Progress</div>
+    </div>
     <div class="progress-steps">
       <div class="progress-step" id="step-upload">
-        <div class="step-dot"></div>
+        <div class="step-dot">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
         <div class="step-info">
           <div class="step-label">Uploading Video</div>
           <div class="step-detail" id="upload-detail"></div>
         </div>
       </div>
       <div class="progress-step" id="step-processing">
-        <div class="step-dot"></div>
+        <div class="step-dot">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
         <div class="step-info">
           <div class="step-label">Processing Video</div>
           <div class="step-detail"></div>
         </div>
       </div>
       <div class="progress-step" id="step-transcribing">
-        <div class="step-dot"></div>
+        <div class="step-dot">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
         <div class="step-info">
           <div class="step-label">Transcribing</div>
           <div class="step-detail"></div>
         </div>
       </div>
       <div class="progress-step" id="step-translating">
-        <div class="step-dot"></div>
+        <div class="step-dot">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
         <div class="step-info">
           <div class="step-label">Translating</div>
           <div class="step-detail"></div>
         </div>
       </div>
       <div class="progress-step" id="step-audio">
-        <div class="step-dot"></div>
+        <div class="step-dot">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
         <div class="step-info">
           <div class="step-label">Generating Audio</div>
           <div class="step-detail"></div>
         </div>
       </div>
       <div class="progress-step" id="step-exporting">
-        <div class="step-dot"></div>
+        <div class="step-dot">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
         <div class="step-info">
           <div class="step-label">Exporting Video</div>
           <div class="step-detail"></div>
         </div>
       </div>
       <div class="progress-step" id="step-done">
-        <div class="step-dot"></div>
+        <div class="step-dot">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
         <div class="step-info">
           <div class="step-label">Completed</div>
           <div class="step-detail"></div>
@@ -640,37 +1038,69 @@ footer a:hover { text-decoration: underline; }
   </div>
 
   <!-- Error -->
-  <div class="error-box" id="errorBox"></div>
+  <div class="error-box" id="errorBox">
+    <div class="error-icon">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6"/><path d="m9 9 6 6"/></svg>
+    </div>
+    <span id="errorText"></span>
+  </div>
 
   <!-- Result -->
   <div class="card" id="result-section">
-    <div class="card-title">Dubbed Video</div>
-    <video class="video-player" id="videoPlayer" controls></video>
+    <div class="card-header">
+      <div class="card-icon" style="background: var(--success-glow); color: var(--success);">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+      </div>
+      <div class="card-title">Dubbed Video</div>
+    </div>
+    <div class="video-wrap">
+      <video class="video-player" id="videoPlayer" controls></video>
+    </div>
     <div class="result-meta" id="resultMeta"></div>
     <a class="btn btn-download" id="downloadBtn" download>
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
       Download Dubbed Video
     </a>
   </div>
 
   <footer>
     Powered by <a href="https://sarvam.ai" target="_blank" rel="noopener">Sarvam AI</a>
-    &middot; <a href="https://github.com/mithungowda07/dub" target="_blank" rel="noopener">GitHub</a>
+    <span class="footer-dot">&middot;</span>
+    <a href="https://github.com/mithun50/sarvam-dub" target="_blank" rel="noopener">GitHub</a>
   </footer>
 
 </div>
 
 <script>
-const API = 'https://dashboard.sarvam.ai/api/dubbing';
-const PROXY = 'https://dashboard.sarvam.ai/api/media-proxy?url=';
+const API_BASE = 'https://dashboard.sarvam.ai/api/dubbing';
+const MEDIA_PROXY = 'https://dashboard.sarvam.ai/api/media-proxy?url=';
+const CORS_PROXY = 'https://corsproxy.io/?url=';
 
-const STEP_MAP = {
-  'uploading':    'step-upload',
-  'processing':   'step-processing',
-  'transcribing': 'step-transcribing',
-  'translating':  'step-translating',
-  'generating':   'step-audio',
-  'exporting':    'step-exporting',
-  'completed':    'step-done',
+function useCors() {
+  return document.getElementById('corsToggle').checked;
+}
+
+function apiUrl(path) {
+  const url = API_BASE + path;
+  return useCors() ? CORS_PROXY + encodeURIComponent(url) : url;
+}
+
+function proxyUrl(url) {
+  const mediaUrl = MEDIA_PROXY + encodeURIComponent(url);
+  return useCors() ? CORS_PROXY + encodeURIComponent(mediaUrl) : mediaUrl;
+}
+
+// Auto-detect: if opened as file://, no CORS needed
+if (location.protocol === 'file:') {
+  document.getElementById('corsToggle').checked = false;
+  document.getElementById('corsBanner').style.display = 'none';
+}
+
+// SVG icons as strings for dynamic insertion
+const IC = {
+  check: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>',
+  x: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>',
+  play: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>',
 };
 
 // Map server step labels to our step IDs
@@ -692,33 +1122,45 @@ const STEP_ORDER = [
 ];
 
 // Elements
-const dropZone      = document.getElementById('dropZone');
-const fileInput     = document.getElementById('fileInput');
-const fileInfo      = document.getElementById('fileInfo');
-const fileName      = document.getElementById('fileName');
-const fileSize      = document.getElementById('fileSize');
-const fileRemove    = document.getElementById('fileRemove');
-const dubBtn        = document.getElementById('dubBtn');
-const progressSec   = document.getElementById('progress-section');
-const progressBar   = document.getElementById('progressBar');
-const progressPct   = document.getElementById('progressPercent');
-const errorBox      = document.getElementById('errorBox');
-const resultSec     = document.getElementById('result-section');
-const videoPlayer   = document.getElementById('videoPlayer');
-const downloadBtn   = document.getElementById('downloadBtn');
-const resultMeta    = document.getElementById('resultMeta');
+const dropZone    = document.getElementById('dropZone');
+const fileInput   = document.getElementById('fileInput');
+const fileInfo    = document.getElementById('fileInfo');
+const fileName    = document.getElementById('fileName');
+const fileSize    = document.getElementById('fileSize');
+const fileRemove  = document.getElementById('fileRemove');
+const dubBtn      = document.getElementById('dubBtn');
+const progressSec = document.getElementById('progress-section');
+const progressBar = document.getElementById('progressBar');
+const progressPct = document.getElementById('progressPercent');
+const errorBox    = document.getElementById('errorBox');
+const errorText   = document.getElementById('errorText');
+const resultSec   = document.getElementById('result-section');
+const videoPlayer = document.getElementById('videoPlayer');
+const downloadBtn = document.getElementById('downloadBtn');
+const resultMeta  = document.getElementById('resultMeta');
 
 let selectedFile = null;
 
-// File handling
+// ── Language chips ──
+document.getElementById('targetLangs').addEventListener('click', e => {
+  const chip = e.target.closest('.lang-chip');
+  if (!chip) return;
+  chip.classList.toggle('selected');
+});
+
+function getSelectedLangs() {
+  return Array.from(document.querySelectorAll('.lang-chip.selected')).map(c => c.dataset.lang);
+}
+
+// ── File handling ──
 function handleFile(file) {
-  if (!file || !file.type.startsWith('video/')) {
-    // Accept common video extensions even if MIME is wrong
-    const ext = file?.name?.split('.').pop()?.toLowerCase();
-    if (!['mp4','mkv','avi','mov','webm','m4v','flv'].includes(ext)) {
-      showError('Please select a video file.');
-      return;
-    }
+  if (!file) return;
+  const isVideo = file.type.startsWith('video/');
+  const ext = file.name.split('.').pop().toLowerCase();
+  const validExts = ['mp4','mkv','avi','mov','webm','m4v','flv'];
+  if (!isVideo && !validExts.includes(ext)) {
+    showError('Please select a video file.');
+    return;
   }
   selectedFile = file;
   fileName.textContent = file.name;
@@ -741,25 +1183,25 @@ fileInput.addEventListener('change', e => {
 
 fileRemove.addEventListener('click', clearFile);
 
-// Drag and drop
+// ── Drag & drop ──
 dropZone.addEventListener('dragover', e => {
   e.preventDefault();
   dropZone.classList.add('drag-over');
 });
 
-dropZone.addEventListener('dragleave', () => {
-  dropZone.classList.remove('drag-over');
+dropZone.addEventListener('dragleave', e => {
+  if (!dropZone.contains(e.relatedTarget)) {
+    dropZone.classList.remove('drag-over');
+  }
 });
 
 dropZone.addEventListener('drop', e => {
   e.preventDefault();
   dropZone.classList.remove('drag-over');
-  if (e.dataTransfer.files[0]) {
-    handleFile(e.dataTransfer.files[0]);
-  }
+  if (e.dataTransfer.files[0]) handleFile(e.dataTransfer.files[0]);
 });
 
-// Utility
+// ── Utilities ──
 function formatBytes(b) {
   if (b < 1024) return b + ' B';
   if (b < 1048576) return (b / 1024).toFixed(1) + ' KB';
@@ -774,7 +1216,7 @@ function formatDuration(s) {
 }
 
 function showError(msg) {
-  errorBox.textContent = msg;
+  errorText.textContent = msg;
   errorBox.classList.add('visible');
 }
 
@@ -782,12 +1224,15 @@ function hideError() {
   errorBox.classList.remove('visible');
 }
 
-// Progress UI
+function sleep(ms) {
+  return new Promise(r => setTimeout(r, ms));
+}
+
+// ── Progress UI ──
 function resetProgress() {
   STEP_ORDER.forEach(id => {
     const el = document.getElementById(id);
     el.className = 'progress-step';
-    el.querySelector('.step-dot').textContent = '';
     el.querySelector('.step-detail').textContent = '';
   });
   progressBar.style.width = '0%';
@@ -800,35 +1245,24 @@ function setStepActive(stepId) {
     const el = document.getElementById(id);
     if (i < idx) {
       el.className = 'progress-step done';
-      el.querySelector('.step-dot').innerHTML = '&#10003;';
     } else if (i === idx) {
       el.className = 'progress-step active';
-      el.querySelector('.step-dot').innerHTML = '';
     } else {
       el.className = 'progress-step';
-      el.querySelector('.step-dot').innerHTML = '';
     }
   });
-}
-
-function setStepDone(stepId) {
-  const el = document.getElementById(stepId);
-  el.className = 'progress-step done';
-  el.querySelector('.step-dot').innerHTML = '&#10003;';
 }
 
 function setStepError(stepId, msg) {
   const el = document.getElementById(stepId);
   el.className = 'progress-step error';
-  el.querySelector('.step-dot').innerHTML = '&#10007;';
+  el.querySelector('.step-dot').innerHTML = IC.x;
   if (msg) el.querySelector('.step-detail').textContent = msg;
 }
 
 function setAllDone() {
   STEP_ORDER.forEach(id => {
-    const el = document.getElementById(id);
-    el.className = 'progress-step done';
-    el.querySelector('.step-dot').innerHTML = '&#10003;';
+    document.getElementById(id).className = 'progress-step done';
   });
 }
 
@@ -837,15 +1271,14 @@ function updateProgress(pct) {
   progressPct.textContent = Math.round(pct) + '%';
 }
 
-// Main dubbing flow
+// ── Main dubbing flow ──
 dubBtn.addEventListener('click', startDubbing);
 
 async function startDubbing() {
   if (!selectedFile) return;
 
   const srcLang = document.getElementById('srcLang').value;
-  const targetSelect = document.getElementById('targetLangs');
-  const targetLangs = Array.from(targetSelect.selectedOptions).map(o => o.value);
+  const targetLangs = getSelectedLangs();
   const genre = document.getElementById('genre').value;
   const numSpeakers = parseInt(document.getElementById('numSpeakers').value) || 1;
 
@@ -868,7 +1301,7 @@ async function startDubbing() {
     document.getElementById('step-upload').querySelector('.step-detail').textContent = 'Creating job...';
 
     const jobName = selectedFile.name.replace(/\.[^.]+$/, '');
-    const jobRes = await fetch(`${API}/jobs`, {
+    const jobRes = await fetch(apiUrl('/jobs'), {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -892,36 +1325,49 @@ async function startDubbing() {
     // 2. Upload video
     document.getElementById('step-upload').querySelector('.step-detail').textContent = 'Uploading...';
 
-    await new Promise((resolve, reject) => {
-      const xhr = new XMLHttpRequest();
-      xhr.open('PUT', upload_url);
-      xhr.setRequestHeader('x-ms-blob-type', 'BlockBlob');
+    if (useCors()) {
+      // Use CORS proxy for upload — send as POST with binary body
+      const proxyUploadUrl = CORS_PROXY + encodeURIComponent(upload_url);
+      const uploadRes = await fetch(proxyUploadUrl, {
+        method: 'PUT',
+        headers: { 'x-ms-blob-type': 'BlockBlob' },
+        body: selectedFile,
+      });
+      if (!uploadRes.ok) throw new Error(`Upload failed (${uploadRes.status})`);
+      document.getElementById('step-upload').querySelector('.step-detail').textContent =
+        `Uploaded ${formatBytes(selectedFile.size)}`;
+    } else {
+      // Direct upload with progress tracking
+      await new Promise((resolve, reject) => {
+        const xhr = new XMLHttpRequest();
+        xhr.open('PUT', upload_url);
+        xhr.setRequestHeader('x-ms-blob-type', 'BlockBlob');
 
-      xhr.upload.onprogress = e => {
-        if (e.lengthComputable) {
-          const pct = (e.loaded / e.total * 100);
-          document.getElementById('step-upload').querySelector('.step-detail').textContent =
-            `Uploading... ${Math.round(pct)}% (${formatBytes(e.loaded)} / ${formatBytes(e.total)})`;
-          updateProgress(pct * 0.05); // Upload is ~5% of total
-        }
-      };
+        xhr.upload.onprogress = e => {
+          if (e.lengthComputable) {
+            const pct = (e.loaded / e.total * 100);
+            document.getElementById('step-upload').querySelector('.step-detail').textContent =
+              `Uploading... ${Math.round(pct)}% (${formatBytes(e.loaded)} / ${formatBytes(e.total)})`;
+            updateProgress(pct * 0.05);
+          }
+        };
 
-      xhr.onload = () => {
-        if (xhr.status >= 200 && xhr.status < 300) resolve();
-        else reject(new Error(`Upload failed (${xhr.status})`));
-      };
+        xhr.onload = () => {
+          if (xhr.status >= 200 && xhr.status < 300) resolve();
+          else reject(new Error(`Upload failed (${xhr.status})`));
+        };
 
-      xhr.onerror = () => reject(new Error('Upload failed - network error'));
-      xhr.send(selectedFile);
-    });
+        xhr.onerror = () => reject(new Error('Upload failed - network error'));
+        xhr.send(selectedFile);
+      });
+    }
 
-    setStepDone('step-upload');
+    setStepActive('step-processing');
     document.getElementById('step-upload').querySelector('.step-detail').textContent = 'Done';
     updateProgress(5);
 
     // 3. Start processing
-    setStepActive('step-processing');
-    const startRes = await fetch(`${API}/jobs/${job_id}/start`, { method: 'POST' });
+    const startRes = await fetch(apiUrl(`/jobs/${job_id}/start`), { method: 'POST' });
     if (!startRes.ok) {
       throw new Error(`Failed to start processing (${startRes.status})`);
     }
@@ -931,44 +1377,34 @@ async function startDubbing() {
 
   } catch (err) {
     showError(err.message);
-    // Mark current active step as error
     const activeStep = document.querySelector('.progress-step.active');
-    if (activeStep) {
-      setStepError(activeStep.id, err.message);
-    }
+    if (activeStep) setStepError(activeStep.id, err.message);
   } finally {
     dubBtn.disabled = false;
-    dubBtn.innerHTML = 'Start Dubbing';
+    dubBtn.innerHTML = IC.play + ' Start Dubbing';
   }
 }
 
 async function pollStatus(jobId) {
   const POLL_INTERVAL = 5000;
-  const MAX_POLLS = 360; // 30 minutes max
+  const MAX_POLLS = 360;
 
   for (let i = 0; i < MAX_POLLS; i++) {
     await sleep(POLL_INTERVAL);
 
-    const res = await fetch(`${API}/jobs/${jobId}/live-status`);
-    if (!res.ok) {
-      throw new Error(`Status check failed (${res.status})`);
-    }
+    const res = await fetch(apiUrl(`/jobs/${jobId}/live-status`));
+    if (!res.ok) throw new Error(`Status check failed (${res.status})`);
 
     const data = await res.json();
     const st = data.data;
 
-    // Update progress
     const pct = Math.max(5, st.progress || 0);
     updateProgress(pct);
 
-    // Update step
     const currentStepLabel = st.current_step_label || st.current_step || '';
     const mappedStep = mapStepToId(currentStepLabel);
-    if (mappedStep) {
-      setStepActive(mappedStep);
-    }
+    if (mappedStep) setStepActive(mappedStep);
 
-    // Check completion
     if (st.status === 'completed') {
       setAllDone();
       updateProgress(100);
@@ -981,12 +1417,11 @@ async function pollStatus(jobId) {
     }
 
     if (st.status === 'partial_failure') {
-      // Some languages may have failed but others succeeded
       if (st.export?.dubbed_video_url) {
         setAllDone();
         updateProgress(100);
         showResult(st);
-        showError('Warning: Some target languages may have failed. Check the result.');
+        showError('Warning: Some target languages may have failed.');
         return;
       }
       throw new Error(st.error_message || 'Dubbing partially failed');
@@ -1005,28 +1440,27 @@ function showResult(st) {
     return;
   }
 
-  // Use media proxy
-  const proxiedUrl = PROXY + encodeURIComponent(dubbedUrl);
-
+  const proxiedUrl = proxyUrl(dubbedUrl);
   videoPlayer.src = proxiedUrl;
   downloadBtn.href = proxiedUrl;
 
-  // Metadata
   let metaHtml = '';
   if (exp.duration) {
-    metaHtml += `<span class="meta-item"><strong>Duration:</strong> ${formatDuration(exp.duration)}</span>`;
+    metaHtml += `<span class="meta-item">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      <strong>${formatDuration(exp.duration)}</strong>
+    </span>`;
   }
   if (exp.file_size) {
-    metaHtml += `<span class="meta-item"><strong>Size:</strong> ${formatBytes(exp.file_size)}</span>`;
+    metaHtml += `<span class="meta-item">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/></svg>
+      <strong>${formatBytes(exp.file_size)}</strong>
+    </span>`;
   }
   resultMeta.innerHTML = metaHtml;
 
   resultSec.classList.add('visible');
   resultSec.scrollIntoView({ behavior: 'smooth', block: 'start' });
-}
-
-function sleep(ms) {
-  return new Promise(r => setTimeout(r, ms));
 }
 </script>
 
