@@ -668,8 +668,8 @@ select:not([multiple]) {
 
 @keyframes spin { to { transform: rotate(360deg); } }
 
-/* ── CORS banner ── */
-.cors-banner {
+/* ── Info banner ── */
+.info-banner {
   background: rgba(251,191,36,0.08);
   border: 1px solid rgba(251,191,36,0.15);
   border-radius: 10px;
@@ -683,61 +683,19 @@ select:not([multiple]) {
   line-height: 1.5;
 }
 
-.cors-banner a { color: #fbbf24; text-decoration: underline; }
-
-.cors-toggle {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-top: 8px;
+.info-banner.hidden { display: none; }
+.info-banner a { color: #fbbf24; }
+.info-banner code {
+  background: rgba(255,255,255,0.08);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 11px;
 }
 
-.cors-toggle label {
-  font-size: 12px;
-  color: var(--text-dim);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.switch {
-  position: relative;
-  width: 36px;
-  height: 20px;
-  display: inline-block;
-}
-
-.switch input { opacity: 0; width: 0; height: 0; }
-
-.switch-slider {
-  position: absolute;
-  inset: 0;
-  background: var(--surface2);
-  border-radius: 20px;
-  border: 1px solid var(--border);
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
-.switch-slider::before {
-  content: '';
-  position: absolute;
-  width: 14px; height: 14px;
-  border-radius: 50%;
-  background: var(--text-dim);
-  left: 2px; top: 2px;
-  transition: all 0.2s;
-}
-
-.switch input:checked + .switch-slider {
-  background: var(--accent-glow2);
-  border-color: var(--accent);
-}
-
-.switch input:checked + .switch-slider::before {
-  background: var(--accent2);
-  transform: translateX(16px);
+.info-banner.ok {
+  background: var(--success-glow);
+  border-color: rgba(34,201,122,0.15);
+  color: var(--success);
 }
 
 /* ── Footer ── */
@@ -822,19 +780,10 @@ footer a:hover { color: var(--accent); }
     </div>
   </header>
 
-  <!-- CORS notice -->
-  <div class="cors-banner" id="corsBanner">
+  <!-- Connection status -->
+  <div class="info-banner" id="infoBanner">
     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:1px"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>
-    <div>
-      <strong>CORS Proxy enabled</strong> &mdash; Browser security blocks direct API calls to Sarvam AI from this page. A CORS proxy is used to relay requests. For local use, you can open this file directly.
-      <div class="cors-toggle">
-        <label class="switch">
-          <input type="checkbox" id="corsToggle" checked>
-          <span class="switch-slider"></span>
-        </label>
-        <label for="corsToggle">Use CORS proxy</label>
-      </div>
-    </div>
+    <div id="infoBannerText">Checking connection...</div>
   </div>
 
   <!-- Upload -->
@@ -1072,69 +1021,47 @@ footer a:hover { color: var(--accent); }
 </div>
 
 <script>
-const API_BASE = 'https://dashboard.sarvam.ai/api/dubbing';
-const MEDIA_PROXY = 'https://dashboard.sarvam.ai/api/media-proxy?url=';
+// ── API Configuration ──
+// When served via serve.py, API calls go to same origin (no CORS).
+// When hosted on GitHub Pages, it needs the local proxy server.
+const SARVAM_API = 'https://dashboard.sarvam.ai';
+const isLocalServer = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
 
-// CORS proxies to try in order (fallback chain)
-const CORS_PROXIES = [
-  url => 'https://corsproxy.io/?' + encodeURIComponent(url),
-  url => 'https://api.allorigins.win/raw?url=' + encodeURIComponent(url),
-  url => 'https://cors.sh/' + url,
-];
-
-let activeProxyIdx = 0;
-
-function useCors() {
-  return document.getElementById('corsToggle').checked;
+// API base: use same-origin proxy when running locally via serve.py
+function apiBase() {
+  return isLocalServer ? '' : SARVAM_API;
 }
 
-function corsWrap(url) {
-  return CORS_PROXIES[activeProxyIdx](url);
+function mediaProxyUrl(blobUrl) {
+  const base = apiBase();
+  return `${base}/api/media-proxy?url=${encodeURIComponent(blobUrl)}`;
 }
 
-function apiUrl(path) {
-  const url = API_BASE + path;
-  return useCors() ? corsWrap(url) : url;
+// Show connection status banner
+const banner = document.getElementById('infoBanner');
+const bannerText = document.getElementById('infoBannerText');
+
+if (isLocalServer) {
+  banner.classList.add('ok');
+  banner.innerHTML = `
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:1px"><polyline points="20 6 9 17 4 12"/></svg>
+    <div>Connected via local proxy server</div>`;
+  setTimeout(() => banner.classList.add('hidden'), 3000);
+} else if (location.protocol === 'file:') {
+  banner.innerHTML = `
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:1px"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>
+    <div>Opened as local file. For full functionality, run the proxy server:<br><code>python serve.py</code> then open <code>http://localhost:8000</code></div>`;
+} else {
+  banner.innerHTML = `
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:1px"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>
+    <div>
+      <strong>Local server required</strong> &mdash; Browser security blocks direct API calls from hosted pages. Clone the repo and run:<br>
+      <code>cd examples/web && python serve.py</code>
+    </div>`;
 }
 
-function proxyUrl(url) {
-  const mediaUrl = MEDIA_PROXY + encodeURIComponent(url);
-  return useCors() ? corsWrap(mediaUrl) : mediaUrl;
-}
-
-// Smart fetch with proxy fallback
-async function corsFetch(url, opts = {}) {
-  if (!useCors()) return fetch(url, opts);
-
-  const fullUrl = (url.startsWith('http')) ? url : API_BASE + url;
-
-  for (let i = activeProxyIdx; i < CORS_PROXIES.length; i++) {
-    try {
-      const proxied = CORS_PROXIES[i](fullUrl);
-      const res = await fetch(proxied, opts);
-      if (res.status === 403 || res.status === 0) {
-        console.warn(`Proxy ${i} returned ${res.status}, trying next...`);
-        continue;
-      }
-      activeProxyIdx = i; // Remember working proxy
-      return res;
-    } catch (e) {
-      console.warn(`Proxy ${i} failed:`, e.message);
-      if (i === CORS_PROXIES.length - 1) throw e;
-    }
-  }
-  throw new Error('All CORS proxies failed. Try disabling the CORS proxy toggle and opening this file locally.');
-}
-
-// Auto-detect: if opened as file://, no CORS needed
-if (location.protocol === 'file:') {
-  document.getElementById('corsToggle').checked = false;
-  document.getElementById('corsBanner').style.display = 'none';
-}
-
-// SVG icons as strings for dynamic insertion
+// SVG icons
 const IC = {
-  check: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>',
   x: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>',
   play: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>',
 };
@@ -1337,7 +1264,7 @@ async function startDubbing() {
     document.getElementById('step-upload').querySelector('.step-detail').textContent = 'Creating job...';
 
     const jobName = selectedFile.name.replace(/\.[^.]+$/, '');
-    const jobRes = await corsFetch(API_BASE + '/jobs', {
+    const jobRes = await fetch(`${apiBase()}/api/dubbing/jobs`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -1360,12 +1287,13 @@ async function startDubbing() {
     const jobData = await jobRes.json();
     const { job_id, upload_url } = jobData.data;
 
-    // 2. Upload video
+    // 2. Upload video to Azure Blob (direct — Azure has CORS configured)
     document.getElementById('step-upload').querySelector('.step-detail').textContent = 'Uploading...';
 
-    if (useCors()) {
-      // Upload through CORS proxy
-      const uploadRes = await corsFetch(upload_url, {
+    if (isLocalServer) {
+      // Via local proxy — proxy the Azure upload through our server
+      const proxyUploadUrl = `/upload-proxy/${encodeURIComponent(upload_url)}`;
+      const uploadRes = await fetch(proxyUploadUrl, {
         method: 'PUT',
         headers: { 'x-ms-blob-type': 'BlockBlob' },
         body: selectedFile,
@@ -1404,7 +1332,7 @@ async function startDubbing() {
     updateProgress(5);
 
     // 3. Start processing
-    const startRes = await corsFetch(API_BASE + `/jobs/${job_id}/start`, { method: 'POST' });
+    const startRes = await fetch(`${apiBase()}/api/dubbing/jobs/${job_id}/start`, { method: 'POST' });
     if (!startRes.ok) {
       throw new Error(`Failed to start processing (${startRes.status})`);
     }
@@ -1429,7 +1357,7 @@ async function pollStatus(jobId) {
   for (let i = 0; i < MAX_POLLS; i++) {
     await sleep(POLL_INTERVAL);
 
-    const res = await corsFetch(API_BASE + `/jobs/${jobId}/live-status`);
+    const res = await fetch(`${apiBase()}/api/dubbing/jobs/${jobId}/live-status`);
     if (!res.ok) throw new Error(`Status check failed (${res.status})`);
 
     const data = await res.json();
@@ -1477,7 +1405,7 @@ function showResult(st) {
     return;
   }
 
-  const proxiedUrl = proxyUrl(dubbedUrl);
+  const proxiedUrl = mediaProxyUrl(dubbedUrl);
   videoPlayer.src = proxiedUrl;
   downloadBtn.href = proxiedUrl;
 
