@@ -27,6 +27,11 @@ class ProxyHandler(http.server.SimpleHTTPRequestHandler):
 
     def do_request(self, method):
         if not self.path.startswith("/api/"):
+            # Silently ignore missing favicon
+            if self.path == "/favicon.ico":
+                self.send_response(204)
+                self.end_headers()
+                return
             if method == "GET":
                 super().do_GET()
             else:
@@ -113,10 +118,15 @@ class ProxyHandler(http.server.SimpleHTTPRequestHandler):
         self.end_headers()
 
     def log_message(self, format, *args):
-        path = args[0].split()[1] if args else ""
-        if path.startswith("/api/"):
-            sys.stderr.write(f"  \033[36mproxy\033[0m {args[0]}\n")
-        else:
+        try:
+            msg = str(args[0]) if args else ""
+            parts = msg.split()
+            path = parts[1] if len(parts) > 1 else ""
+            if path.startswith("/api/") or path.startswith("/upload-proxy/"):
+                sys.stderr.write(f"  \033[36mproxy\033[0m {msg}\n")
+            elif path != "/favicon.ico":
+                super().log_message(format, *args)
+        except Exception:
             super().log_message(format, *args)
 
 
