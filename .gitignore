@@ -1,0 +1,17 @@
+__pycache__/
+*.pyc
+*.pyo
+.env
+.cookies
+node_modules/
+*.mp4
+*.mkv
+*.avi
+*.mov
+*.wav
+*.mp3
+.DS_Store
+Thumbs.db
+dist/
+build/
+*.egg-info/

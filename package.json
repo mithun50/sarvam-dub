@@ -1,0 +1,34 @@
+{
+  "name": "sarvam-dub",
+  "version": "1.0.0",
+  "description": "Dub videos into 12 Indian languages using Sarvam AI",
+  "main": "sarvam_dub.js",
+  "bin": {
+    "sarvam-dub": "./dub.js"
+  },
+  "scripts": {
+    "dub": "node dub.js"
+  },
+  "keywords": [
+    "sarvam",
+    "dubbing",
+    "video",
+    "translation",
+    "indian-languages",
+    "hindi",
+    "tamil",
+    "telugu",
+    "ai",
+    "voice-cloning",
+    "text-to-speech"
+  ],
+  "author": "Mithun Gowda B <mithungowda.b7411@gmail.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mithun50/sarvam-dub"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
